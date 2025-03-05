@@ -1,0 +1,73 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+
+export default function PredictivePolicing() {
+  const [longitude, setLongitude] = useState(77.2);
+  const [latitude, setLatitude] = useState(28.6);
+  const [prediction, setPrediction] = useState(null);
+  const [crimeBreakdown, setCrimeBreakdown] = useState({});
+  const [modelMetrics, setModelMetrics] = useState({});
+
+  const fetchPrediction = async () => {
+    // This should be replaced with actual API call to your Python backend
+    const response = await fetch("/api/predict", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ longitude, latitude }),
+    });
+    const data = await response.json();
+    setPrediction(data.total_crime);
+    setCrimeBreakdown(data.crime_breakdown);
+    setModelMetrics(data.model_metrics);
+  };
+
+  return (
+    <div className="flex flex-col items-center p-6 space-y-6">
+      <h1 className="text-2xl font-bold">Predictive Policing Dashboard</h1>
+      <div className="flex space-x-4">
+        <Input
+          type="number"
+          value={longitude}
+          onChange={(e) => setLongitude(parseFloat(e.target.value))}
+          placeholder="Enter Longitude"
+        />
+        <Input
+          type="number"
+          value={latitude}
+          onChange={(e) => setLatitude(parseFloat(e.target.value))}
+          placeholder="Enter Latitude"
+        />
+        <Button onClick={fetchPrediction}>Predict Crime</Button>
+      </div>
+
+      {prediction !== null && (
+        <Card className="w-96">
+          <CardContent>
+            <h2 className="text-xl font-semibold">Prediction</h2>
+            <p>Total Predicted Crimes: <strong>{prediction}</strong></p>
+            <h3 className="mt-4">Crime Breakdown:</h3>
+            <ul>
+              {Object.entries(crimeBreakdown).map(([crime, count]) => (
+                <li key={crime}>{crime}: {count}</li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
+
+      {modelMetrics.r2 && (
+        <Card className="w-96">
+          <CardContent>
+            <h2 className="text-xl font-semibold">Model Performance</h2>
+            <p>Linear Regression: MSE = {modelMetrics.lin_mse}, R² = {modelMetrics.lin_r2}</p>
+            <p>Ridge Regression: MSE = {modelMetrics.ridge_mse}, R² = {modelMetrics.ridge_r2}</p>
+            <p>Lasso Regression: MSE = {modelMetrics.lasso_mse}, R² = {modelMetrics.lasso_r2}</p>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
