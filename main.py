@@ -18,7 +18,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 data = pd.read_csv("data.csv")
 
-# Feature selection
+# Here Feature selection 
 
 crime_columns = ['murder', 'rape', 'gangrape', 'robbery', 'theft', 'assualt murders', 'sexual harassement']
 
@@ -40,7 +40,7 @@ X_scaled = scaler.fit_transform(X)
 
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
 
-# Linear Regression
+# Below is Linear Regression
 
 lin_reg = LinearRegression()
 
@@ -52,7 +52,7 @@ lin_mse = mean_squared_error(y_test, y_pred_lin)
 
 lin_r2 = r2_score(y_test, y_pred_lin)
 
-# Ridge Regression
+# Below is Ridge Regression
 
 ridge = Ridge(alpha=1.0)
 
@@ -64,7 +64,7 @@ ridge_mse = mean_squared_error(y_test, y_pred_ridge)
 
 ridge_r2 = r2_score(y_test, y_pred_ridge)
 
-# Lasso Regression
+# Below is Lasso Regression
 
 lasso = Lasso(alpha=0.1)
 
@@ -78,13 +78,13 @@ lasso_r2 = r2_score(y_test, y_pred_lasso)
 
 # Crime Prediction for New Locations
 
-new_locations = np.array([[77.2, 28.6], [77.1, 28.7]]) # Example coordinates
+new_locations = np.array([[77.2, 28.6], [77.1, 28.7]]) # these are Example coordinates
 
 new_locations_scaled = scaler.transform(new_locations)
 
 predicted_crimes = lin_reg.predict(new_locations_scaled)
 
-# Display predictions with crime types
+# below code will Display predictions with crime types
 
 for i, loc in enumerate(new_locations):
 
@@ -98,7 +98,7 @@ print("Crime Breakdown:", crime_info)
 
 print("---")
 
-# Printing results
+# below code will Print results
 
 print(f"Linear Regression MSE: {lin_mse:.2f}, R²: {lin_r2:.2f}")
 
