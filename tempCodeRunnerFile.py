@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-# Load the dataset
+# Loading the dataset
 file_path = "crime-data.csv"  # Adjust path if needed
 df = pd.read_csv(file_path)
 
-# # Cleaning the data
+# # thinking of Cleaning the data
 # df.columns = df.columns.str.strip()
 # df = df.dropna()  # Drop rows with missing values
 
@@ -24,14 +24,14 @@ district_accidents = df['DISTRICT'].value_counts()
 print("\nAccidents by District:")
 print(district_accidents)
 
-# Total injuries and fatalities
+# total injuries and fatalities
 total_injured = df['# INJURED'].sum()
 total_killed = df['# KILLED'].sum()
 print(f"\nTotal Injuries: {total_injured}, Total Fatalities: {total_killed}")
 
 
 
-# Visualize accident types
+# Visualizing accident types
 plt.figure(figsize=(8, 5))
 sns.barplot(x=accident_counts.index, y=accident_counts.values)
 plt.title("Accident Type Distribution")
@@ -40,7 +40,7 @@ plt.ylabel("Count")
 plt.xticks(rotation=45)
 plt.show()
 
-# Visualize accidents by district
+# Visualizing accidents by district
 plt.figure(figsize=(10, 6))
 sns.barplot(x=district_accidents.index, y=district_accidents.values)
 plt.title("Accidents by District")
